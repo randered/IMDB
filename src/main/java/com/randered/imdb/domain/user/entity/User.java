@@ -1,4 +1,4 @@
-package com.randered.imdb.domain.user;
+package com.randered.imdb.domain.user.entity;
 
 import com.randered.imdb.domain.base.BaseEntity;
 import lombok.AllArgsConstructor;

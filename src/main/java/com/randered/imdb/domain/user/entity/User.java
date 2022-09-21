@@ -1,16 +1,20 @@
 package com.randered.imdb.domain.user.entity;
 
 import com.randered.imdb.domain.base.BaseEntity;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.randered.imdb.domain.rating.entity.Rating;
+import com.randered.imdb.domain.role.entity.Role;
+import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Set;
 
+import static javax.persistence.CascadeType.MERGE;
+import static javax.persistence.FetchType.LAZY;
+
+@Entity
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")
@@ -22,4 +26,17 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private String fullName;
+
+    @ManyToOne
+    @JoinColumn(name = "rating_id")
+    private Rating rating;
+
+    @ManyToMany(fetch = LAZY, cascade = MERGE)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
 }

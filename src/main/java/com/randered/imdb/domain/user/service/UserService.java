@@ -12,15 +12,19 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
 
-    private User update(final User user) {
-        return userRepository.save(user);
+    public void update(final User user) {
+        userRepository.save(user);
     }
 
-    private Optional<User> findById(final Long id) {
+    public Optional<User> findById(final Integer id) {
         return userRepository.findById(id);
     }
 
-    private Optional<User> findByName(final String username) {
+    public Optional<User> findByName(final String username) {
         return userRepository.findByUsername(username);
+    }
+
+    public int count() {
+        return (int) userRepository.count();
     }
 }

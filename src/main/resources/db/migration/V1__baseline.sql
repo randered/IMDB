@@ -9,13 +9,12 @@ VALUES (0);
 -- Create Movies Table
 CREATE TABLE movies
 (
-    id        int NOT NULL,
-    name      VARCHAR(255),
-    year      int,
-    actors_id int,
-    genre     VARCHAR(255),
-    image     VARCHAR(255),
-    trailer   VARCHAR(255),
+    id      int NOT NULL,
+    name    VARCHAR(255),
+    year    int,
+    genre   VARCHAR(255),
+    image   VARCHAR(255),
+    trailer VARCHAR(255),
     PRIMARY KEY (`id`)
 );
 
@@ -30,9 +29,8 @@ CREATE TABLE roles
 -- Create Actors Table
 CREATE TABLE actors
 (
-    id        int NOT NULL,
-    name      VARCHAR(255),
-    movies_id int,
+    id   int NOT NULL,
+    name VARCHAR(255),
     PRIMARY KEY (`id`)
 );
 
@@ -41,7 +39,9 @@ CREATE TABLE movies_actors
     `movies_id` int,
     `actors_id` int,
     KEY         `FKhfh9dx7w3ubf1co1vdev94g32` (`movies_id`),
-    CONSTRAINT `FKhfh9dx7w3ubf1co1vdev94g32` FOREIGN KEY (`movies_id`) REFERENCES `movies` (`id`)
+    KEY         `FKhfh9dx7w3ubf1co1vdev94g33` (`actors_id`),
+    CONSTRAINT `FKhfh9dx7w3ubf1co1vdev94g32` FOREIGN KEY (`movies_id`) REFERENCES `movies` (`id`),
+    CONSTRAINT `FKhfh9dx7w3ubf1co1vdev94g33` FOREIGN KEY (`actors_id`) REFERENCES `actors` (`id`)
 );
 
 -- Create Users Table

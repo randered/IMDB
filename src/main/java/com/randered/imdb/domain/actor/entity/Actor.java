@@ -2,8 +2,7 @@ package com.randered.imdb.domain.actor.entity;
 
 import com.randered.imdb.domain.base.BaseEntity;
 import com.randered.imdb.domain.movie.entity.Movie;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -12,6 +11,9 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "actors", uniqueConstraints = {
         @UniqueConstraint(name = "uk_actors_name", columnNames = {"name"})})
 public class Actor extends BaseEntity {

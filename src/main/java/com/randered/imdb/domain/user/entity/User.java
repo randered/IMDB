@@ -1,6 +1,7 @@
 package com.randered.imdb.domain.user.entity;
 
 import com.randered.imdb.domain.base.BaseEntity;
+import com.randered.imdb.domain.rating.entity.Rating;
 import com.randered.imdb.domain.role.entity.Role;
 import lombok.*;
 
@@ -27,6 +28,10 @@ public class User extends BaseEntity {
 
     @Column(nullable = false)
     private String fullName;
+
+    @ManyToOne
+    @JoinColumn(name = "rating_id")
+    private Rating rating;
 
     @ManyToMany(fetch = LAZY, cascade = MERGE)
     @JoinTable(

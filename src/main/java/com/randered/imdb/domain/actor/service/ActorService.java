@@ -1,7 +1,7 @@
 package com.randered.imdb.domain.actor.service;
 
-import com.randered.imdb.domain.user.entity.User;
-import com.randered.imdb.domain.user.repository.UserRepository;
+import com.randered.imdb.domain.actor.entity.Actor;
+import com.randered.imdb.domain.actor.repository.ActorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,17 +11,17 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ActorService {
 
-    private final UserRepository userRepository;
+    private final ActorRepository actorRepository;
 
-    private User update(final User user) {
-        return userRepository.save(user);
+    public void update(final Actor actor) {
+        actorRepository.save(actor);
     }
 
-    private Optional<User> findById(final Integer id) {
-        return userRepository.findById(id);
+    public Optional<Actor> findById(final Integer id) {
+        return actorRepository.findById(id);
     }
 
-    private Optional<User> findByName(final String username) {
-        return userRepository.findByUsername(username);
+    public Optional<Actor> findByName(final String name) {
+        return actorRepository.findByName(name);
     }
 }

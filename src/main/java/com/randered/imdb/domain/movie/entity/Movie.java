@@ -3,18 +3,18 @@ package com.randered.imdb.domain.movie.entity;
 import com.randered.imdb.domain.actor.entity.Actor;
 import com.randered.imdb.domain.base.BaseEntity;
 import com.randered.imdb.domain.rating.entity.Rating;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @NamedEntityGraph(
         name = "movie",
         attributeNodes = {
@@ -51,9 +51,4 @@ public class Movie extends BaseEntity {
     }
 
     private String trailer;
-
-    public Movie() {
-        this.ratings = new ArrayList<>();
-        this.actors = new HashSet<>();
-    }
 }

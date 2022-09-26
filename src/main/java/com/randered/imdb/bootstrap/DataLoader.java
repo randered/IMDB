@@ -1,4 +1,4 @@
-package com.randered.imdb.bootStrap;
+package com.randered.imdb.bootstrap;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
@@ -8,8 +8,7 @@ import com.randered.imdb.domain.movie.entity.Movie;
 import com.randered.imdb.domain.movie.service.MovieService;
 import com.randered.imdb.domain.rating.entity.Rating;
 import com.randered.imdb.domain.rating.service.RatingService;
-import com.randered.imdb.domain.role.entity.Role;
-import com.randered.imdb.domain.role.service.RoleService;
+import com.randered.imdb.domain.user.authentication.authority.Authority;
 import com.randered.imdb.domain.user.entity.User;
 import com.randered.imdb.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -21,15 +20,12 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
 public class DataLoader {
-
-    private static final String DEV_PROFILE = "dev";
 
     Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
             "cloud_name", "da0vsli58",
@@ -41,14 +37,6 @@ public class DataLoader {
     private final MovieService movieService;
     private final RatingService ratingService;
     private final Environment env;
-    private final RoleService roleService;
-
-    private Set<Role> roles;
-
-    @PostConstruct
-    private void initRoles() {
-        roles = roleService.getAllRoles();
-    }
 
 
     @Bean
@@ -71,7 +59,7 @@ public class DataLoader {
                     .fullName("Admin Adminkov")
                     .username("admin")
                     .password("admin")
-                    .roles(Set.of(getRoleName("Admin")))
+                    .authority(Authority.ADMIN)
                     .build();
             userService.update(admin);
 
@@ -79,7 +67,7 @@ public class DataLoader {
                     .fullName("Petko Petkov")
                     .username("user")
                     .password("user")
-                    .roles(Set.of(getRoleName("User")))
+                    .authority(Authority.USER)
                     .build();
             userService.update(user);
 
@@ -142,12 +130,5 @@ public class DataLoader {
             ironMan.setActors(Set.of(actor));
             movieService.update(ironMan);
         };
-    }
-
-    private Role getRoleName(final String roleName) {
-        return roles.stream()
-                .filter(role -> role.getName().equalsIgnoreCase(roleName))
-                .findFirst()
-                .orElse(null);
     }
 }

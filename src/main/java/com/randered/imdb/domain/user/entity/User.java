@@ -2,14 +2,10 @@ package com.randered.imdb.domain.user.entity;
 
 import com.randered.imdb.domain.base.BaseEntity;
 import com.randered.imdb.domain.rating.entity.Rating;
-import com.randered.imdb.domain.role.entity.Role;
+import com.randered.imdb.domain.user.authentication.authority.Authority;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Set;
-
-import static javax.persistence.CascadeType.MERGE;
-import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
@@ -33,10 +29,6 @@ public class User extends BaseEntity {
     @JoinColumn(name = "rating_id")
     private Rating rating;
 
-    @ManyToMany(fetch = LAZY, cascade = MERGE)
-    @JoinTable(
-            name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+    @Enumerated(EnumType.STRING)
+    private Authority authority;
 }

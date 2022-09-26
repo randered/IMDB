@@ -14,6 +14,7 @@ import java.util.Set;
 @Getter
 @Setter
 public class MovieDto {
+
     @NotEmpty(message = "Movie name must not be empty.")
     private String name;
 

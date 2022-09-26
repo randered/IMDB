@@ -12,8 +12,8 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
 
-    public void update(final User user) {
-        userRepository.save(user);
+    public User update(final User user) {
+        return userRepository.save(user);
     }
 
     public Optional<User> findById(final Integer id) {

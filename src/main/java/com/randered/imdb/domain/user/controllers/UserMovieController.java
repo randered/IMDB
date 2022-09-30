@@ -1,6 +1,5 @@
 package com.randered.imdb.domain.user.controllers;
 
-import com.randered.imdb.domain.authority.IsUser;
 import com.randered.imdb.domain.rating.ratingDTO.RatingDto;
 import com.randered.imdb.domain.rating.service.RatingService;
 import lombok.RequiredArgsConstructor;
@@ -13,12 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-
 import java.security.Principal;
 
 import static com.randered.imdb.util.common.Constants.*;
 
-@IsUser
 @RestController
 @RequestMapping(PATH_USER)
 @RequiredArgsConstructor

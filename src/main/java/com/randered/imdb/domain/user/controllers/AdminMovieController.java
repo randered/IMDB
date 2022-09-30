@@ -1,6 +1,5 @@
 package com.randered.imdb.domain.user.controllers;
 
-import com.randered.imdb.domain.authority.IsAdmin;
 import com.randered.imdb.domain.movie.movieDTO.MovieDto;
 import com.randered.imdb.domain.movie.service.MovieService;
 import com.randered.imdb.util.validation.ValidationResponse;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-@IsAdmin
 @RestController
 @RequestMapping("/admin")
 @RequiredArgsConstructor

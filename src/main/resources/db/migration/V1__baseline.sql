@@ -43,8 +43,7 @@ CREATE TABLE users
     username  VARCHAR(255),
     password  VARCHAR(255),
     full_name VARCHAR(255),
-    authority VARCHAR(255),
-    rating_id int,
+    role VARCHAR(255),
     PRIMARY KEY (`id`)
 );
 

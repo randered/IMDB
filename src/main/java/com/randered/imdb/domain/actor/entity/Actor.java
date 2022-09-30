@@ -5,6 +5,7 @@ import com.randered.imdb.domain.movie.entity.Movie;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -12,7 +13,6 @@ import java.util.Set;
 @Getter
 @Setter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "actors", uniqueConstraints = {
         @UniqueConstraint(name = "uk_actors_name", columnNames = {"name"})})
@@ -35,5 +35,9 @@ public class Actor extends BaseEntity {
     @Override
     public int hashCode() {
         return Objects.hash(name, movies);
+    }
+
+    public Actor(){
+        this.movies = new HashSet<>();
     }
 }

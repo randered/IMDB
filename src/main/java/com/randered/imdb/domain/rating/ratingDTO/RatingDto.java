@@ -8,6 +8,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+
 @Getter
 @Setter
 public class RatingDto {
@@ -19,4 +20,6 @@ public class RatingDto {
     @Min(value = 1)
     @Max(value = 10)
     private int userRating;
+
+    private String comment;
 }

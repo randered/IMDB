@@ -5,11 +5,12 @@ public final class Constants {
     private Constants() {
     }
 
-    public static final String BASE_PATH = "/api/v1";
+    public static final String BASE_PATH = "/api";
     public static final String PATH_USER = "/user";
     public static final String RATE_PATH = "/rate";
-    public static final String LOGIN = "/login";
-    public static final String HOME = "/home";
+    public static final String LOGIN = BASE_PATH + "/login";
+
+    public static final String MOVIES = "/movies";
 
     public static final String ROLE = "role";
     public static final String USER = "USER";

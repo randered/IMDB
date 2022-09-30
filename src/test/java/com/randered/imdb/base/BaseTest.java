@@ -1,8 +1,8 @@
 package com.randered.imdb.base;
 
 import com.randered.imdb.domain.actor.actorDTO.ActorDto;
+import com.randered.imdb.domain.authority.Role;
 import com.randered.imdb.domain.movie.movieDTO.MovieDto;
-import com.randered.imdb.domain.user.authentication.authority.Authority;
 import com.randered.imdb.domain.user.entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.MockitoAnnotations;
@@ -26,7 +26,7 @@ public abstract class BaseTest {
                 .fullName(fullName)
                 .username(username)
                 .password(password)
-                .authority(Authority.USER)
+                .role(Role.USER)
                 .build();
     }
 
@@ -35,7 +35,7 @@ public abstract class BaseTest {
                 .fullName(fullName)
                 .username(username)
                 .password(password)
-                .authority(Authority.ADMIN)
+                .role(Role.ADMIN)
                 .build();
     }
 

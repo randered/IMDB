@@ -5,6 +5,7 @@ import com.randered.imdb.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -16,15 +17,19 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public Optional<User> findById(final Integer id) {
+    public Optional<User> findUserById(final Integer id) {
         return userRepository.findById(id);
     }
 
-    public Optional<User> findByName(final String username) {
+    public User findUserByUsername(final String username) {
         return userRepository.findByUsername(username);
     }
 
     public int count() {
         return (int) userRepository.count();
+    }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 }

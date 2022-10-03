@@ -1,7 +1,10 @@
 package com.randered.imdb.domain.user.controllers;
 
+import com.randered.imdb.domain.authority.IsAdmin;
 import com.randered.imdb.domain.movie.movieDTO.MovieDto;
 import com.randered.imdb.domain.movie.service.MovieService;
+import com.randered.imdb.domain.user.entity.User;
+import com.randered.imdb.domain.user.service.UserService;
 import com.randered.imdb.util.validation.ValidationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,14 +14,18 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
 @RequiredArgsConstructor
 @Validated
+@IsAdmin
 public class AdminMovieController {
 
     private final MovieService movieService;
+
+    private final UserService userService;
 
 //    @PostMapping(IMAGE_PATH)
 //    public ResponseEntity<ValidationResponse> uploadImage(
@@ -38,7 +45,7 @@ public class AdminMovieController {
 //        return ResponseEntity.status(HttpStatus.OK).body(new ValidationResponse(IMAGE_DELETED));
 //    }
 
-    @PostMapping
+    @PostMapping("/movie/create")
     public ResponseEntity<ValidationResponse> uploadMovie(@Valid @RequestBody MovieDto movieDto) {
         movieService.createMovie(movieDto);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -57,5 +64,10 @@ public class AdminMovieController {
 
         movieService.deleteMovie(id);
         return ResponseEntity.status(HttpStatus.OK).body(new ValidationResponse("MOVIE_DELETED"));
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> getAllUsers() {
+        return ResponseEntity.ok().body(userService.findAll());
     }
 }

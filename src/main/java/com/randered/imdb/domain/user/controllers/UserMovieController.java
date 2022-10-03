@@ -1,5 +1,6 @@
 package com.randered.imdb.domain.user.controllers;
 
+import com.randered.imdb.domain.authority.IsUser;
 import com.randered.imdb.domain.rating.ratingDTO.RatingDto;
 import com.randered.imdb.domain.rating.service.RatingService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import static com.randered.imdb.util.common.Constants.*;
 @RequestMapping(PATH_USER)
 @RequiredArgsConstructor
 @Validated
+@IsUser
 public class UserMovieController {
 
     private final RatingService ratingService;

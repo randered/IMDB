@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -24,7 +23,6 @@ import static com.randered.imdb.util.common.Constants.*;
 public class SecurityConfiguration {
 
     private final UserAuthenticationService userAuthenticationService;
-    private final PasswordEncoder passwordEncoder;
 
     @Bean
     public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
@@ -37,8 +35,9 @@ public class SecurityConfiguration {
 
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authenticationManager(authenticationManager);
-        http.authorizeRequests().antMatchers(HttpMethod.GET, "/user/**").hasAnyAuthority(USER, ADMIN);
+        http.authorizeRequests().antMatchers(LOGIN + ALLOW_ALL, BASE_PATH + TOKEN_REFRESH, BASE_PATH + REGISTER ).permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "api/movies").hasAnyAuthority(USER);
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/admin/users").hasAnyAuthority(ADMIN);
         http.authorizeRequests().anyRequest().authenticated();
 //                .antMatchers(HttpMethod.POST, USER_URL + REGISTER, LOGIN)
 //                .permitAll()
@@ -47,6 +46,7 @@ public class SecurityConfiguration {
 //                .antMatchers(HttpMethod.GET, LOGIN, "/users", "/**")
         http.addFilter(authenticationFilter);
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.authenticationManager(authenticationManager);
         return http.build();
     }
 }

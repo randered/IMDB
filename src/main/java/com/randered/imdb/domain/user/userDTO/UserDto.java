@@ -1,17 +1,12 @@
 package com.randered.imdb.domain.user.userDTO;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.randered.imdb.domain.authority.Role;
+import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
 public class UserDto {
 
     @NotEmpty
@@ -24,4 +19,6 @@ public class UserDto {
 
     @NotEmpty
     private String fullName;
+
+    private Role role;
 }

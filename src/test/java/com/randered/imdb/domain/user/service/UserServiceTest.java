@@ -41,10 +41,10 @@ class UserServiceTest extends BaseTest {
     }
 
     @Test
-    void findByName() {
-        final User test = userService.findUserByName("Vasko Vasilev").orElse(null);
+    void findByUsername() {
+        final User test = userService.findUserByUsername("vasko5");
         if (test != null) {
-            assertEquals(test.getFullName(), user.getFullName());
+            assertEquals(test.getUsername(), user.getUsername());
         }
     }
 

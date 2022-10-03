@@ -1,10 +1,7 @@
 package com.randered.imdb.security;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import com.auth0.jwt.interfaces.Verification;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.randered.imdb.security.jwtservice.JwtService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -34,31 +31,31 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws IOException, ServletException {
-        if (request.getServletPath().equals(LOGIN) || request.getServletPath().equals(MOVIES)) {
+        if (allowedPaths(request)) {
             filterChain.doFilter(request, response);
         } else {
             final String authorizationHeader = request.getHeader(HEADER_STRING);
             if (authorizationHeader != null && authorizationHeader.startsWith(TOKEN_PREFIX)) {
                 try {
                     final String token = authorizationHeader.substring(TOKEN_PREFIX.length());
-                    final Algorithm algorithm = Algorithm.HMAC512(SECRET.getBytes());
-                    final Verification verifier = JWT.require(algorithm);
-                    final DecodedJWT decodedJWT = verifier.build().verify(token);
-                    final String username = decodedJWT.getSubject();
-                    final String[] roles = decodedJWT.getClaim(ROLE).asArray(String.class);
+
+                    final String username = JwtService.getSubjectUsername(token);
+                    final String[] roles = JwtService.getSubjectRoles(token);
+
                     final Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
                     stream(roles).forEach(role -> {
                         authorities.add(new SimpleGrantedAuthority(role));
                     });
+
                     final UsernamePasswordAuthenticationToken authenticationToken =
                             new UsernamePasswordAuthenticationToken(username, null, authorities);
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
                     filterChain.doFilter(request, response);
                 } catch (Exception exception) {
                     log.error("Error logging in: {}", exception.getMessage());
                     response.setHeader("error", exception.getMessage());
                     response.setStatus(FORBIDDEN.value());
-//                    response.sendError(FORBIDDEN.value());
 
                     final Map<String, String> error = new HashMap<>();
                     error.put("error_message", exception.getMessage());
@@ -69,6 +66,12 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
             }
         }
+    }
+
+    private boolean allowedPaths(HttpServletRequest request) {
+        return request.getServletPath().equals(LOGIN) ||
+               request.getServletPath().equals(MOVIES) ||
+               request.getServletPath().equals(BASE_PATH + TOKEN_REFRESH);
     }
 }
 

@@ -10,6 +10,8 @@ public final class Constants {
     public static final String RATE_PATH = "/rate";
     public static final String LOGIN = BASE_PATH + "/login";
 
+    public static final String ALLOW_ALL = "/**";
+
     public static final String MOVIES = "/movies";
 
     public static final String ROLE = "role";
@@ -17,13 +19,12 @@ public final class Constants {
     public static final String ADMIN = "ADMIN";
 
     public static final String REGISTER = "/register";
-    public static final String USER_URL = "/user";
 
     public static final String REFRESH_URL = "/refresh";
     public static final String SUCCESSFUL_REGISTER = "User registered.";
     public static final String SUCCESSFUL_RATING = "Rating posted.";
 
-    public static final String USER_ALREADY_EXISTS = "User with username %s, already exists!";
+    public static final String USER_ALREADY_EXISTS = "User with username %s, already exists.";
     public static final String USER_NOT_FOUND_MSG = "User: %s not found.";
     public static final String USER_ID_NOT_FOUND_MSG = "User ID not found.";
 
@@ -35,7 +36,7 @@ public final class Constants {
 
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String HEADER_STRING = "Authorization";
-    public static final String SIGN_UP_URL = "/api/services/controller/user";
+    public static final String TOKEN_REFRESH = "/token/refresh";
     public static final String AUTHORITY = "authority";
 
     public static final String SECURITY_CONFIG_PREFIX = "security";

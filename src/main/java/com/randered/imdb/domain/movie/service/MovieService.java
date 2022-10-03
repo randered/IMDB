@@ -61,7 +61,6 @@ public class MovieService {
         final Movie movie = movieRepository.findById(id)
                 .orElseThrow();
         movieRepository.delete(movie);
-//        s3Client.deleteObject(bucketName, movie.getImage());
     }
 
     public Optional<Movie> findById(final Integer id) {

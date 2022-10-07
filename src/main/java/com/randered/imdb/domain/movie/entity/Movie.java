@@ -15,21 +15,21 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "movies")
 @NamedEntityGraph(
         name = "movie",
         attributeNodes = {
-                @NamedAttributeNode(value = "actors"),
-                @NamedAttributeNode(value = "ratings")
+                @NamedAttributeNode(value = "ratings"),
+                @NamedAttributeNode(value = "actors")
         }
 )
-@Table(name = "movies")
 public class Movie extends BaseEntity {
 
     @Column(unique = true, nullable = false)
     private String name;
 
     @Column(nullable = false)
-    private int year;
+    private Integer year;
 
     @OneToMany(mappedBy = "movie", fetch = FetchType.LAZY)
     private List<Rating> ratings;

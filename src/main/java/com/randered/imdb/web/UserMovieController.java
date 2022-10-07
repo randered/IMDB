@@ -1,6 +1,6 @@
-package com.randered.imdb.domain.user.controllers;
+package com.randered.imdb.web;
 
-import com.randered.imdb.domain.authority.IsUser;
+import com.randered.imdb.domain.role.IsUser;
 import com.randered.imdb.domain.rating.ratingDTO.RatingDto;
 import com.randered.imdb.domain.rating.service.RatingService;
 import lombok.RequiredArgsConstructor;

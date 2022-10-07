@@ -4,7 +4,7 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.randered.imdb.domain.actor.entity.Actor;
 import com.randered.imdb.domain.actor.service.ActorService;
-import com.randered.imdb.domain.authority.Role;
+import com.randered.imdb.domain.role.Role;
 import com.randered.imdb.domain.movie.entity.Movie;
 import com.randered.imdb.domain.movie.service.MovieService;
 import com.randered.imdb.domain.rating.entity.Rating;

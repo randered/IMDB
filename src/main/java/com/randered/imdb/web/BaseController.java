@@ -1,18 +1,27 @@
-package com.randered.imdb.domain.user.controllers;
+package com.randered.imdb.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.randered.imdb.domain.movie.filter.MovieFilter;
+import com.randered.imdb.domain.movie.movieDTO.MovieDto;
+import com.randered.imdb.domain.movie.service.MovieService;
 import com.randered.imdb.domain.user.service.UserAuthenticationService;
 import com.randered.imdb.domain.user.service.UserService;
 import com.randered.imdb.domain.user.userDTO.UserDto;
 import com.randered.imdb.security.jwtservice.JwtService;
+import com.randered.imdb.util.Request;
+import com.randered.imdb.util.file.FileUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +40,10 @@ public class BaseController {
 
     private final UserService userService;
 
+    private final MovieService movieService;
+
+    private final FileUtil cloudinary;
+
     @PostMapping(REGISTER)
     public ResponseEntity<String> register(@Valid @RequestBody UserDto userDto) {
         try {
@@ -39,11 +52,6 @@ public class BaseController {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
         return ResponseEntity.created(null).body("User Created!");
-    }
-
-    @GetMapping("/")
-    String home() {
-        return "home";
     }
 
     @GetMapping(TOKEN_REFRESH)
@@ -66,8 +74,14 @@ public class BaseController {
         }
     }
 
-//    @PostMapping()
-//    public Page<MovieDto> getFilteredMovies(@Valid @RequestBody RequestDto<FilterDto> filters){
-//        return customQueryService.listFilteredMovies(filters);
-//    }
+    @PostMapping()
+    public Page<MovieDto> getFilteredMovies(@Valid @RequestBody Request<MovieFilter> request) {
+        return movieService.getFilteredMovies(request);
+    }
+
+    @GetMapping("/upload")
+    public String uploadImage(@NotNull final String movieName, @NotNull final MultipartFile image) {
+        cloudinary.uploadFile(new File("src/main/resources/test2.jpeg"));
+        return "YEAH ! ";
+    }
 }

@@ -1,6 +1,6 @@
 package com.randered.imdb.domain.user.userDTO;
 
-import com.randered.imdb.domain.authority.Role;
+import com.randered.imdb.domain.role.Role;
 import lombok.*;
 
 import javax.validation.constraints.NotEmpty;

@@ -1,6 +1,7 @@
 package com.randered.imdb.domain.movie.movieDTO;
 
 import com.randered.imdb.domain.actor.actorDTO.ActorDto;
+import com.randered.imdb.domain.rating.entity.Rating;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,7 +9,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -21,11 +24,13 @@ public class MovieDto {
     @NotNull(message = "Year must not be null.")
     private int year;
 
-    @NotEmpty(message = "Actors list must not be empty.")
+    private List<Rating> ratings;
     private Set<@Valid ActorDto> actors;
 
     @NotEmpty(message = "Genre must not be empty.")
     private String genre;
+
+    private String image;
 
     @NotBlank(message = "Trailer must not be blank.")
     private String trailer;
@@ -33,6 +38,7 @@ public class MovieDto {
     private double averageRating;
 
     public MovieDto() {
+        this.ratings = new ArrayList<>();
         this.actors = new HashSet<>();
     }
 }

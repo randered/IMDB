@@ -1,8 +1,10 @@
-package com.randered.imdb.domain.user.controllers;
+package com.randered.imdb.web;
 
-import com.randered.imdb.domain.authority.IsAdmin;
+import com.randered.imdb.domain.actor.actorDTO.ActorDto;
+import com.randered.imdb.domain.actor.service.ActorService;
 import com.randered.imdb.domain.movie.movieDTO.MovieDto;
 import com.randered.imdb.domain.movie.service.MovieService;
+import com.randered.imdb.domain.role.IsAdmin;
 import com.randered.imdb.domain.user.entity.User;
 import com.randered.imdb.domain.user.service.UserService;
 import com.randered.imdb.util.validation.ValidationResponse;
@@ -24,6 +26,7 @@ import java.util.List;
 public class AdminMovieController {
 
     private final MovieService movieService;
+    private final ActorService actorService;
 
     private final UserService userService;
 
@@ -46,10 +49,22 @@ public class AdminMovieController {
 //    }
 
     @PostMapping("/movie/create")
-    public ResponseEntity<ValidationResponse> uploadMovie(@Valid @RequestBody MovieDto movieDto) {
+    public ResponseEntity<ValidationResponse> createMovie(@Valid @RequestBody MovieDto movieDto) {
         movieService.createMovie(movieDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ValidationResponse("MOVIE_CREATED", HttpStatus.OK));
+    }
+
+    @PostMapping("/actor/create")
+    public ResponseEntity<ValidationResponse> createActor(@Valid @RequestBody ActorDto actorDto) {
+        actorService.createActor(actorDto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new ValidationResponse("ACTOR_CREATED", HttpStatus.OK));
+    }
+
+    @GetMapping("/actors")
+    public ResponseEntity<List<ActorDto>> getAllActors() {
+        return ResponseEntity.ok().body(actorService.findAll());
     }
 
     @PutMapping

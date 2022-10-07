@@ -1,6 +1,6 @@
 package com.randered.imdb.domain.user.entity;
 
-import com.randered.imdb.domain.authority.Role;
+import com.randered.imdb.domain.role.Role;
 import com.randered.imdb.domain.base.BaseEntity;
 import lombok.*;
 

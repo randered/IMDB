@@ -23,14 +23,6 @@ class UserServiceTest extends BaseTest {
         admin = buildAdmin();
         userService.update(admin);
     }
-//
-//    @Test
-//    void update() {
-//        assertEquals("Admin", admin.getFullName());
-//        admin.setFullName("Test");
-//        userService.update(admin);
-//        assertEquals("Test", admin.getFullName());
-//    }
 
     @Test
     void findById() {

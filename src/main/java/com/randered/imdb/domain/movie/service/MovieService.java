@@ -1,16 +1,22 @@
 package com.randered.imdb.domain.movie.service;
 
-import com.randered.imdb.domain.actor.entity.Actor;
-import com.randered.imdb.domain.actor.service.ActorService;
+import com.randered.imdb.domain.actor.mapper.ActorMapper;
 import com.randered.imdb.domain.movie.entity.Movie;
+import com.randered.imdb.domain.movie.filter.MovieFilter;
+import com.randered.imdb.domain.movie.mapper.MovieMapper;
 import com.randered.imdb.domain.movie.movieDTO.MovieDto;
 import com.randered.imdb.domain.movie.repository.MovieRepository;
+import com.randered.imdb.util.Request;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -19,30 +25,32 @@ import java.util.stream.Collectors;
 @Transactional
 public class MovieService {
     private final MovieRepository movieRepository;
-    private final ModelMapper modelMapper;
-    private final ActorService actorService;
+    private final MovieMapper movieMapper;
+    private final ActorMapper actorMapper;
 
     public void update(final Movie movie) {
         movieRepository.save(movie);
     }
 
-    public void createMovie(@NonNull final MovieDto movieDto) {
-        final Movie movie = modelMapper.map(movieDto, Movie.class);
+    public Movie saveOrGet(final Movie movie) {
+        return movieRepository.save(movie);
+    }
+
+    public Movie createMovie(@NonNull final MovieDto movieDto) {
+        final Movie movie = movieMapper.map(movieDto);
         movie.setActors(movie.getActors());
-        movieRepository.save(movie);
+        return movieRepository.save(movie);
     }
 
     public void updateMovie(@NonNull final MovieDto movieDto) {
-        final Movie movie = movieRepository.findByName(movieDto.getName())
-                .orElseThrow();
-
+        final Movie movie = movieRepository.findByName(movieDto.getName()).orElse(null);
+        assert movie != null;
         setMovie(movieDto, movie);
         movieRepository.save(movie);
     }
 
 
     private void setMovie(final MovieDto movieDto, final Movie movie) {
-
         movie.setName(movieDto.getName());
         movie.setGenre(movieDto.getGenre());
         movie.setYear(movieDto.getYear());
@@ -53,7 +61,7 @@ public class MovieService {
         movie.setActors(movieDto
                 .getActors()
                 .stream()
-                .map(actorDto -> modelMapper.map(actorDto, Actor.class))
+                .map(actorMapper::map)
                 .collect(Collectors.toSet()));
     }
 
@@ -71,13 +79,26 @@ public class MovieService {
         return movieRepository.findByName(username);
     }
 
-//
-//    private Set<Actor> getActors(final Set<Actor> actors) {
-//        final Set<Actor> tempActors = new HashSet<>();
-//        for (Actor actor : actors) {
-//            tempActors.add(actorService.findByName(actor.getName()).orElse(null));
-//        }
-//        return tempActors;
-//    }
+    public Page<MovieDto> getFilteredMovies(final Request<MovieFilter> request) {
+        final List<Movie> filteredMovies;
+        final MovieFilter filter = request.getFilter();
+        final Pageable pageable = PageRequest.of(request.getPageNumber(), request.getPageSize());
+        if (request.getFilter().getYear() != null) {
+            filteredMovies = movieRepository.getFilteredMovies(
+                    checkIfNull(filter.getName()),
+                    filter.getYear(),
+                    checkIfNull(filter.getGenre()));
+        } else {
+            filteredMovies = movieRepository.getFilteredMovies(
+                    checkIfNull(filter.getName()),
+                    checkIfNull(filter.getGenre()));
+        }
 
+        final List<MovieDto> filteredMovieDtos = filteredMovies.stream().map(movieMapper::map).toList();
+        return new PageImpl<>(filteredMovieDtos, pageable, filteredMovies.size());
+    }
+
+    protected static String checkIfNull(final String value) {
+        return value == null ? "" : value;
+    }
 }

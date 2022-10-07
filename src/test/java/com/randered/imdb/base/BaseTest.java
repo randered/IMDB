@@ -1,7 +1,7 @@
 package com.randered.imdb.base;
 
 import com.randered.imdb.domain.actor.actorDTO.ActorDto;
-import com.randered.imdb.domain.authority.Role;
+import com.randered.imdb.domain.role.Role;
 import com.randered.imdb.domain.movie.movieDTO.MovieDto;
 import com.randered.imdb.domain.user.entity.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,8 +48,9 @@ public abstract class BaseTest {
                 new ActorDto("Jorjomir")));
         movieDto.setYear(2018);
         movieDto.setTrailer("https://www.youtube.com/watch?v=V9JtoEGS05I");
-        movieDto.setName("1000 puti");
-        movieDto.setGenre("musical");
+        movieDto.setName("Movie");
+        movieDto.setGenre("movie");
+        movieDto.setAverageRating(4.5);
         return movieDto;
     }
 

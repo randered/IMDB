@@ -1,4 +1,4 @@
-package com.randered.imdb.domain.authority;
+package com.randered.imdb.domain.role;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 

@@ -1,7 +1,7 @@
 package com.randered.imdb.domain.user.service;
 
 import com.randered.imdb.customExceptions.UserAlreadyExistAuthenticationException;
-import com.randered.imdb.domain.authority.Role;
+import com.randered.imdb.domain.role.Role;
 import com.randered.imdb.domain.user.entity.User;
 import com.randered.imdb.domain.user.mapper.UserMapper;
 import com.randered.imdb.domain.user.userDTO.UserDto;
@@ -30,7 +30,7 @@ public class UserAuthenticationService implements UserDetailsService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public UserDto registerUser(@NonNull final UserDto userDto) {
+    public void registerUser(@NonNull final UserDto userDto) {
         User user = userService.findUserByUsername(userDto.getUsername());
         if (null != user) {
             log.error("User Already exist!");
@@ -38,8 +38,7 @@ public class UserAuthenticationService implements UserDetailsService {
         }
         user = mapUser(userDto);
         log.info("User Created {} ", user.getFullName());
-        return userMapper.map(userService.update(user));
-
+        userMapper.map(userService.update(user));
     }
 
     @Override

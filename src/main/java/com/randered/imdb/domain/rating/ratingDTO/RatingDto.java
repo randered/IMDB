@@ -19,7 +19,7 @@ public class RatingDto {
 
     @Min(value = 1)
     @Max(value = 10)
-    private int userRating;
+    private double rating;
 
     private String comment;
 }

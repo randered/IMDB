@@ -4,11 +4,11 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.randered.imdb.domain.actor.entity.Actor;
 import com.randered.imdb.domain.actor.service.ActorService;
-import com.randered.imdb.domain.role.Role;
 import com.randered.imdb.domain.movie.entity.Movie;
 import com.randered.imdb.domain.movie.service.MovieService;
 import com.randered.imdb.domain.rating.entity.Rating;
 import com.randered.imdb.domain.rating.service.RatingService;
+import com.randered.imdb.domain.role.Role;
 import com.randered.imdb.domain.user.entity.User;
 import com.randered.imdb.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
-import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -38,7 +37,6 @@ public class DataLoader {
     private final MovieService movieService;
     private final RatingService ratingService;
     private final PasswordEncoder passwordEncoder;
-    private final Environment env;
 
 
     @Bean

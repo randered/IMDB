@@ -9,15 +9,16 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import static com.randered.imdb.util.common.Constants.USER_NOT_FOUND_MSG;
 
@@ -56,14 +57,15 @@ public class UserAuthenticationService implements UserDetailsService {
         User user = userMapper.map(userDto);
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setRole(Role.USER);
-
         if (userService.count() == 0L) {
             user.setRole(Role.ADMIN);
         }
         return user;
     }
 
-    public List<User> findAll() {
-        return userService.findAll();
+    public User getContextHolder() {
+        Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        return userService.findUserById(Integer.valueOf(jwt.getId())).orElseThrow(RuntimeException::new);
     }
 }

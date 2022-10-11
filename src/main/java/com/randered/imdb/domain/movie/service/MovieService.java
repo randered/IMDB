@@ -1,5 +1,6 @@
 package com.randered.imdb.domain.movie.service;
 
+import com.randered.imdb.customExceptions.UserNotFoundException;
 import com.randered.imdb.domain.actor.mapper.ActorMapper;
 import com.randered.imdb.domain.movie.entity.Movie;
 import com.randered.imdb.domain.movie.filter.MovieFilter;
@@ -7,6 +8,7 @@ import com.randered.imdb.domain.movie.mapper.MovieMapper;
 import com.randered.imdb.domain.movie.movieDTO.MovieDto;
 import com.randered.imdb.domain.movie.repository.MovieRepository;
 import com.randered.imdb.util.Request;
+import com.randered.imdb.util.file.FileUtil;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,10 +16,10 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,6 +29,8 @@ public class MovieService {
     private final MovieRepository movieRepository;
     private final MovieMapper movieMapper;
     private final ActorMapper actorMapper;
+
+    private final FileUtil fileUtil;
 
     public void update(final Movie movie) {
         movieRepository.save(movie);
@@ -49,6 +53,17 @@ public class MovieService {
         movieRepository.save(movie);
     }
 
+    public void addImageToMovie(@NonNull final String movieName, @NonNull final MultipartFile file) {
+        final Movie movie = movieRepository.findByName(movieName).orElse(null);
+        if (movie != null) {
+            movie.setImage(file.getName());
+            movieRepository.save(movie);
+            fileUtil.uploadImage(file);
+        } else {
+            throw new RuntimeException(String.format("Movie with name: %s not found", movieName));
+        }
+    }
+
 
     private void setMovie(final MovieDto movieDto, final Movie movie) {
         movie.setName(movieDto.getName());
@@ -67,16 +82,16 @@ public class MovieService {
 
     public void deleteMovie(@NonNull final Integer id) {
         final Movie movie = movieRepository.findById(id)
-                .orElseThrow();
+                .orElseThrow(UserNotFoundException::new);
         movieRepository.delete(movie);
     }
 
-    public Optional<Movie> findById(final Integer id) {
-        return movieRepository.findById(id);
+    public Movie findById(final Integer id) {
+        return movieRepository.findById(id).orElse(null);
     }
 
-    public Optional<Movie> findByName(final String username) {
-        return movieRepository.findByName(username);
+    public Movie findByName(final String name) {
+        return movieRepository.findByName(name).orElse(null);
     }
 
     public Page<MovieDto> getFilteredMovies(final Request<MovieFilter> request) {

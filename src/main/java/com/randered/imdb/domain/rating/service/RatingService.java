@@ -7,7 +7,7 @@ import com.randered.imdb.domain.rating.entity.Rating;
 import com.randered.imdb.domain.rating.ratingDTO.RatingDto;
 import com.randered.imdb.domain.rating.repository.RatingRepository;
 import com.randered.imdb.domain.user.entity.User;
-import com.randered.imdb.domain.user.service.UserService;
+import com.randered.imdb.domain.user.service.UserAuthenticationService;
 import com.sun.istack.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -20,7 +20,7 @@ import java.util.Optional;
 public class RatingService {
     private final RatingRepository ratingRepository;
     private final MovieService movieService;
-    private final UserService userService;
+    private final UserAuthenticationService userAuthenticationService;
 
     public void update(final Rating rating) {
         ratingRepository.save(rating);
@@ -30,10 +30,10 @@ public class RatingService {
         return ratingRepository.findById(id);
     }
 
-    public void rateMovie(@NotNull final RatingDto ratingDto, final String name) {
-        final Movie movie = movieService.findByName(ratingDto.getMovieName()).orElse(null);
-        final User user = userService.findUserByUsername(name);
-        final Rating rating = new Rating(user, movie, ratingDto.getUserRating(), ratingDto.getComment());
+    public void rateMovie(@NotNull final RatingDto ratingDto) {
+        final Movie movie = movieService.findByName(ratingDto.getMovieName());
+        final User user = userAuthenticationService.getContextHolder();
+        final Rating rating = new Rating(user, movie, ratingDto.getRating(), ratingDto.getComment());
 
         try {
             ratingRepository.save(rating);

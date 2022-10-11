@@ -16,13 +16,16 @@ public class UserService {
     public User update(final User user) {
         return userRepository.save(user);
     }
+    public void clearRepository(){
+        userRepository.deleteAll();
+    }
 
     public Optional<User> findUserById(final Integer id) {
         return userRepository.findById(id);
     }
 
     public User findUserByUsername(final String username) {
-        return userRepository.findByUsername(username);
+        return userRepository.findByUsername(username).orElse(null);
     }
 
     public int count() {

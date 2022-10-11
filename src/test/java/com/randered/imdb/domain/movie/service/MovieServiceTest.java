@@ -7,20 +7,21 @@ import com.randered.imdb.domain.movie.movieDTO.MovieDto;
 import com.randered.imdb.domain.movie.repository.MovieRepository;
 import com.randered.imdb.util.Request;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class MovieServiceTest extends BaseTest {
-
-    @Autowired
-    private MovieService movieService;
 
     @Autowired
     private MovieRepository movieRepository;
@@ -30,8 +31,8 @@ class MovieServiceTest extends BaseTest {
 
     @BeforeEach
     public void before() {
-        movie = movieService.createMovie(buildMovieDto());
-        created = movieService.saveOrGet(movie);
+        movie = movieRepository.save(buildMovie("Test1"));
+        created = movieRepository.save(movie);
     }
 
     @Test
@@ -40,42 +41,57 @@ class MovieServiceTest extends BaseTest {
         assertEquals(movie.getGenre(), created.getGenre());
         assertEquals(movie.getYear(), created.getYear());
         assertEquals(movie.getAverageRating(), created.getAverageRating());
-
-        final Optional<Movie> movieOpt = movieService.findById(created.getId());
-        assertTrue(movieOpt.isPresent());
+        final Movie movie = movieService.findById(created.getId());
+        assertNotNull(movie);
     }
 
     @Test
-    void testGetFilteredMovies() {
-        MovieFilter filter = buildMovieFilter(movie);
-        Request<MovieFilter> request = buildMovieRequest(filter);
-        Page<MovieDto> moviesPage = movieService.getFilteredMovies(request);
+    @DisplayName("Given all parameters to filter will return expected movies count")
+    void testGetFilteredMoviesWithAllParams() {
+        // Given
+        final int expectedCount = 1;
+        final MovieFilter filter = buildFilter(movie.getName(), movie.getGenre(), movie.getYear());
+        final Request<MovieFilter> request = buildMovieRequest(filter);
 
-        assertEquals(movie.getName(), moviesPage.getContent().get(0).getName());
-        int count = moviesPage.getContent().size();
-        assertEquals(1, count);
+        // When
+        final Page<MovieDto> moviesPage = movieService.getFilteredMovies(request);
+        final int count = moviesPage.getContent().size();
 
-        MovieFilter filter2 = buildFilter("o", null, null);
-        Request<MovieFilter> request2 = buildMovieRequest(filter2);
-        Page<MovieDto> moviesPage2 = movieService.getFilteredMovies(request2);
-        int count2 = moviesPage2.getContent().size();
-        assertEquals(3, count2);
+        // Then
+        assertEquals(expectedCount, count);
+    }
+
+    @Test
+    @DisplayName("Given one parameter to filter will return expected movies count")
+    void testGetFilteredMoviesWithOneParam() {
+        // Given
+        final int expectedCount = 2;
+        final MovieFilter filter = buildFilter("T", null, null);
+        final Request<MovieFilter> request = buildMovieRequest(filter);
+        // When
+        final Page<MovieDto> moviesPage = movieService.getFilteredMovies(request);
+        final int count = moviesPage.getContent().size();
+        // Then
+        assertEquals(expectedCount, count);
+    }
+
+    @Test
+    void testUploadImage() throws IOException {
+        final File file = new File("src/test/resources/thor.jpg");
+        final FileInputStream inputStream = new FileInputStream(file);
+        final MultipartFile multipartFile = new MockMultipartFile("image", file.getName(),
+                "image/png", inputStream.readAllBytes());
+        assertNull(movieService.findByName(movie.getName()).getImage());
+        movieService.addImageToMovie(created.getName(), multipartFile);
+        assertNotNull(movieService.findByName(created.getName()).getImage());
     }
 
     @Test
     void testGetAllMovies() {
-        List<Movie> movies = movieRepository.findAll();
+        final List<Movie> movies = movieRepository.findAll();
         assert !movies.isEmpty();
         int count = movies.size();
         assertEquals(3, count);
-    }
-
-    private MovieFilter buildMovieFilter(final Movie movie) {
-        return MovieFilter.builder()
-                .name(movie.getName())
-                .genre(movie.getGenre())
-                .year(movie.getYear())
-                .build();
     }
 
     private MovieFilter buildFilter(final String name, final String genre, final Integer year) {
@@ -89,7 +105,7 @@ class MovieServiceTest extends BaseTest {
     private Request<MovieFilter> buildMovieRequest(final MovieFilter filter) {
         Request<MovieFilter> request = new Request<>();
         request.setFilter(filter);
-        request.setPageNumber(1);
+        request.setPageNumber(0);
         request.setPageSize(1);
         return request;
     }

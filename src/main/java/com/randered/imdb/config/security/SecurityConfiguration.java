@@ -52,9 +52,4 @@ public class SecurityConfiguration {
         http.authenticationManager(authenticationManager);
         return http.build();
     }
-
-//    @Bean
-//    public WebSecurityCustomizer webSecurityCustomizer() {
-//        return (web) -> web.ignoring().antMatchers(ANT_MATCHERS);
-//    }
 }

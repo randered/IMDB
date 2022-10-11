@@ -35,15 +35,17 @@ public class SecurityConfiguration {
 
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests().antMatchers(LOGIN + ALLOW_ALL, BASE_PATH + TOKEN_REFRESH, BASE_PATH + REGISTER, BASE_PATH +"/upload" ).permitAll();
-        http.authorizeRequests().antMatchers(HttpMethod.GET, "api/movies").hasAnyAuthority(USER);
-        http.authorizeRequests().antMatchers(HttpMethod.GET, "/admin/users").hasAnyAuthority(ADMIN);
+        http.authorizeRequests().antMatchers(LOGIN + ALLOW_ALL, BASE_PATH + TOKEN_REFRESH, BASE_PATH + REGISTER, LIST_MOVIES)
+                .permitAll();
+
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/user/**").hasAnyAuthority(USER);
+
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/admin/**").hasAnyAuthority(ADMIN);
+        http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/admin/**").hasAnyAuthority(ADMIN);
+        http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/api/admin/**").hasAnyAuthority(ADMIN);
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/admin/**").hasAnyAuthority(ADMIN);
+
         http.authorizeRequests().anyRequest().authenticated();
-//                .antMatchers(HttpMethod.POST, USER_URL + REGISTER, LOGIN)
-//                .permitAll()
-//                .antMatchers(ANT_MATCHERS)
-//                .permitAll()
-//                .antMatchers(HttpMethod.GET, LOGIN, "/users", "/**")
         http.addFilter(authenticationFilter);
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
         http.authenticationManager(authenticationManager);

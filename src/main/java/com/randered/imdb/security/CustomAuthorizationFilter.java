@@ -26,7 +26,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Slf4j
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
-
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -69,8 +68,9 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
     }
 
     private boolean allowedPaths(HttpServletRequest request) {
-        return request.getServletPath().equals(LOGIN) ||
-               request.getServletPath().equals(MOVIES) ||
+        return request.getServletPath().equals(BASE_PATH + LOGIN) ||
+               request.getServletPath().equals(BASE_PATH + MOVIES) ||
+               request.getServletPath().equals(BASE_PATH + REGISTER) ||
                request.getServletPath().equals(BASE_PATH + TOKEN_REFRESH);
     }
 }

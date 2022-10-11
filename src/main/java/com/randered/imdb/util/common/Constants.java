@@ -7,13 +7,24 @@ public final class Constants {
 
     public static final String BASE_PATH = "/api";
     public static final String PATH_USER = "/user";
+    public static final String PATH_ADMIN = "/admin";
     public static final String RATE_PATH = "/rate";
     public static final String LOGIN = BASE_PATH + "/login";
 
     public static final String ALLOW_ALL = "/**";
 
     public static final String MOVIES = "/movies";
+    public static final String CREATE_MOVIE = "/movie/create";
+    public static final String DELETE_MOVIE = "/movie/delete";
 
+    public static final String IMAGE_MOVIE = "/movie/image";
+
+    public static final String ADMIN_DELETE_MOVIE = PATH_ADMIN + DELETE_MOVIE;
+
+
+    public static final String LIST_MOVIES = BASE_PATH + MOVIES;
+
+    public static final String ADMIN_CREATE_MOVIE = BASE_PATH + PATH_ADMIN + CREATE_MOVIE;
     public static final String ROLE = "role";
     public static final String USER = "USER";
     public static final String ADMIN = "ADMIN";
@@ -22,7 +33,11 @@ public final class Constants {
 
     public static final String REFRESH_URL = "/refresh";
     public static final String SUCCESSFUL_REGISTER = "User registered.";
+
+    public static final String SUCCESSFUL_IMAGE_UPLOAD = "User registered.";
     public static final String SUCCESSFUL_RATING = "Rating posted.";
+    public static final String MOVIE_CREATED = "Movie created.";
+    public static final String MOVIE_DELETED = "Movie deleted.";
 
     public static final String USER_ALREADY_EXISTS = "User with username %s, already exists.";
     public static final String USER_NOT_FOUND_MSG = "User: %s not found.";

@@ -9,35 +9,25 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
 public class FileUtil {
 
-
     private final Cloudinary cloudinary;
 
-    public String uploadFile(final MultipartFile image) {
+    public void uploadImage(final MultipartFile image) {
         try {
             File uploadedFile = multipartToFile(image);
-            Map uploadResult = cloudinary.uploader().upload(uploadedFile, getUploadConfig());
-            return uploadResult.get("url").toString();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void uploadFile(final File file) {
-        try {
-            Map uploadResult = cloudinary.uploader().upload(file, getUploadConfig());
-            uploadResult.get("url");
+            cloudinary.uploader().upload(uploadedFile, getUploadConfig());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     private static File multipartToFile(final MultipartFile image) throws IllegalStateException, IOException {
-        File convFile = new File(image.getOriginalFilename());
+        final File convFile = new File(Objects.requireNonNull(image.getOriginalFilename()));
         image.transferTo(convFile);
         return convFile;
     }

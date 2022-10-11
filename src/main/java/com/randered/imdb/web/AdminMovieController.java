@@ -4,6 +4,8 @@ import com.randered.imdb.domain.actor.actorDTO.ActorDto;
 import com.randered.imdb.domain.actor.service.ActorService;
 import com.randered.imdb.domain.movie.movieDTO.MovieDto;
 import com.randered.imdb.domain.movie.service.MovieService;
+import com.randered.imdb.domain.rating.entity.Rating;
+import com.randered.imdb.domain.rating.repository.RatingRepository;
 import com.randered.imdb.domain.role.IsAdmin;
 import com.randered.imdb.domain.user.entity.User;
 import com.randered.imdb.domain.user.service.UserService;
@@ -32,6 +34,7 @@ public class AdminMovieController {
     private final MovieService movieService;
     private final ActorService actorService;
     private final UserService userService;
+    private final RatingRepository ratingRepository;
 
     @PostMapping(IMAGE_MOVIE)
     public ResponseEntity<ValidationResponse> uploadImage(
@@ -43,15 +46,14 @@ public class AdminMovieController {
                 .body(new ValidationResponse(SUCCESSFUL_IMAGE_UPLOAD, HttpStatus.OK));
     }
 
-
-    @PostMapping("/movie/create")
+    @PostMapping(CREATE_MOVIE)
     public ResponseEntity<ValidationResponse> createMovie(@Valid @RequestBody MovieDto movieDto) {
         movieService.createMovie(movieDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ValidationResponse(MOVIE_CREATED, HttpStatus.OK));
     }
 
-    @PostMapping("/actor/create")
+    @PostMapping(CREATE_ACTOR)
     public ResponseEntity<ValidationResponse> createActor(@Valid @RequestBody ActorDto actorDto) {
         actorService.createActor(actorDto);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -69,7 +71,7 @@ public class AdminMovieController {
         return ResponseEntity.status(HttpStatus.OK).body(new ValidationResponse("MOVIE_UPDATED"));
     }
 
-    @DeleteMapping("/movie/delete")
+    @DeleteMapping(DELETE_MOVIE)
     public ResponseEntity<ValidationResponse> deleteMovie(
             @NotNull(message = "INVALID_MOVIE_ID") @RequestParam Integer id) {
 
@@ -82,9 +84,9 @@ public class AdminMovieController {
         return ResponseEntity.ok().body(userService.findAll());
     }
 
-    @GetMapping("/upload/image")
-    public String uploadImage(@NotNull final String movieName, @NotNull final MultipartFile image) {
-        movieService.addImageToMovie(movieName, image);
-        return String.format("Successfully added image to movie: %s", movieName);
+    @GetMapping(USER_RATINGS)
+    public ResponseEntity<List<Rating>> getAllRatingsForUser(final String username) {
+        final User user = userService.findUserByUsername(username);
+        return ResponseEntity.ok().body(ratingRepository.findAllByUser(user));
     }
 }

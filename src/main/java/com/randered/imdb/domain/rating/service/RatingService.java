@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,8 +26,8 @@ public class RatingService {
         ratingRepository.save(rating);
     }
 
-    public Optional<Rating> findById(final Integer id) {
-        return ratingRepository.findById(id);
+    public List<Rating> findAllByUser(final User user) {
+        return ratingRepository.findAllByUser(user);
     }
 
     public void rateMovie(@NotNull final RatingDto ratingDto) {

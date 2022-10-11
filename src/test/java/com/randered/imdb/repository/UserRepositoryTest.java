@@ -22,7 +22,6 @@ public class UserRepositoryTest extends BaseTest {
         userService.update(user);
     }
 
-
     @Test
     void findById() {
         final User test = userRepository.findById(user.getId()).orElse(null);

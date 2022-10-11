@@ -35,7 +35,8 @@ public class SecurityConfiguration {
 
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests().antMatchers(LOGIN + ALLOW_ALL, BASE_PATH + TOKEN_REFRESH, BASE_PATH + REGISTER, LIST_MOVIES)
+        http.authorizeRequests().antMatchers(LOGIN + ALLOW_ALL, BASE_PATH + TOKEN_REFRESH,
+                        BASE_PATH + REGISTER, LIST_MOVIES)
                 .permitAll();
 
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/user/**").hasAnyAuthority(USER);

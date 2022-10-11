@@ -16,9 +16,6 @@ public class UserService {
     public User update(final User user) {
         return userRepository.save(user);
     }
-    public void clearRepository(){
-        userRepository.deleteAll();
-    }
 
     public Optional<User> findUserById(final Integer id) {
         return userRepository.findById(id);

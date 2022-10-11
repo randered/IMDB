@@ -21,7 +21,6 @@ public class UserAuthenticationServiceTest extends BaseTest {
     @Autowired
     private UserAuthenticationService authenticationService;
 
-
     @Test
     void testRegisterUser() {
         UserDto userDto = setUserDto();

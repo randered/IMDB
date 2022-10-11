@@ -87,9 +87,9 @@ public abstract class BaseTest {
         return buildAdmin("Admin", "admin", "admin");
     }
 
-    protected Rating buildRating(final User user) {
+    protected Rating buildRating(final User user, final Movie movie) {
         return Rating.builder()
-                .movie(buildMovie("RatedMovie"))
+                .movie(movie)
                 .user(user)
                 .comment("testing")
                 .rating(5.0)

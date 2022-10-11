@@ -52,11 +52,9 @@ class MovieServiceTest extends BaseTest {
         final int expectedCount = 1;
         final MovieFilter filter = buildFilter(movie.getName(), movie.getGenre(), movie.getYear());
         final Request<MovieFilter> request = buildMovieRequest(filter);
-
         // When
         final Page<MovieDto> moviesPage = movieService.getFilteredMovies(request);
         final int count = moviesPage.getContent().size();
-
         // Then
         assertEquals(expectedCount, count);
     }

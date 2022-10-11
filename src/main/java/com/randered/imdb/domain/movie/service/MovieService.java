@@ -29,15 +29,10 @@ public class MovieService {
     private final MovieRepository movieRepository;
     private final MovieMapper movieMapper;
     private final ActorMapper actorMapper;
-
     private final FileUtil fileUtil;
 
     public void update(final Movie movie) {
         movieRepository.save(movie);
-    }
-
-    public Movie saveOrGet(final Movie movie) {
-        return movieRepository.save(movie);
     }
 
     public Movie createMovie(@NonNull final MovieDto movieDto) {
@@ -63,7 +58,6 @@ public class MovieService {
             throw new RuntimeException(String.format("Movie with name: %s not found", movieName));
         }
     }
-
 
     private void setMovie(final MovieDto movieDto, final Movie movie) {
         movie.setName(movieDto.getName());

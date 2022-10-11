@@ -33,9 +33,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class BaseController {
 
     private final UserAuthenticationService userAuthenticationService;
-
     private final UserService userService;
-
     private final MovieService movieService;
 
     @PostMapping(REGISTER)
@@ -72,4 +70,5 @@ public class BaseController {
     public Page<MovieDto> getFilteredMovies(@Valid @RequestBody Request<MovieFilter> request) {
         return movieService.getFilteredMovies(request);
     }
+
 }

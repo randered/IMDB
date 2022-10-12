@@ -9,10 +9,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 public class MovieRepositoryTest extends BaseTest {
 
     @Autowired
     private MovieRepository movieRepository;
+
+    @Test
+    public void testCRUDMovie() {
+        Movie movie = movieRepository.save(buildMovie("Test1"));
+        Movie created = movieRepository.save(movie);
+        assertEquals(movie.getName(), created.getName());
+        assertEquals(movie.getGenre(), created.getGenre());
+        assertEquals(movie.getYear(), created.getYear());
+        assertEquals(movie.getAverageRating(), created.getAverageRating());
+        movie = movieService.findById(created.getId());
+        assertNotNull(movie);
+    }
 
     @Test
     void testFindByName() {

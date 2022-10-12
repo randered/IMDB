@@ -17,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,16 +32,6 @@ class MovieServiceTest extends BaseTest {
     public void before() {
         movie = movieRepository.save(buildMovie("Test1"));
         created = movieRepository.save(movie);
-    }
-
-    @Test
-    public void testCRUDMovie() {
-        assertEquals(movie.getName(), created.getName());
-        assertEquals(movie.getGenre(), created.getGenre());
-        assertEquals(movie.getYear(), created.getYear());
-        assertEquals(movie.getAverageRating(), created.getAverageRating());
-        final Movie movie = movieService.findById(created.getId());
-        assertNotNull(movie);
     }
 
     @Test
@@ -82,14 +71,6 @@ class MovieServiceTest extends BaseTest {
         assertNull(movieService.findByName(movie.getName()).getImage());
         movieService.addImageToMovie(created.getName(), multipartFile);
         assertNotNull(movieService.findByName(created.getName()).getImage());
-    }
-
-    @Test
-    void testGetAllMovies() {
-        final List<Movie> movies = movieRepository.findAll();
-        assert !movies.isEmpty();
-        int count = movies.size();
-        assertEquals(3, count);
     }
 
     private MovieFilter buildFilter(final String name, final String genre, final Integer year) {

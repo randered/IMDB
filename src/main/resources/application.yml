@@ -27,3 +27,10 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+
+cloudinary:
+  cloud:
+    name: ${CLOUD_NAME:da0vsli58}
+  api:
+    key: ${KEY:572576397362646}
+    secret: ${SECRET:p8y74iFVm0OyQ3XNgigeeSs-Y4w}

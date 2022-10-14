@@ -1,11 +1,12 @@
 package com.imdb.web;
 
 import com.imdb.domain.rating.dto.RatingDto;
+import com.imdb.domain.rating.service.RatingService;
 import com.imdb.domain.role.IsUser;
 import com.imdb.util.common.Constants;
-import com.imdb.domain.rating.service.RatingService;
 import com.imdb.util.validation.ValidationResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -21,6 +22,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @Validated
 @IsUser
+@Log4j2
 public class UserMovieController {
 
     private final RatingService ratingService;
@@ -28,6 +30,7 @@ public class UserMovieController {
     @PostMapping(Constants.RATE_PATH)
     public ResponseEntity<ValidationResponse> postRating(@Valid @RequestBody RatingDto ratingDto) {
         ratingService.rateMovie(ratingDto);
+        log.info("Movie with name {} was rated", ratingDto.getMovieName());
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ValidationResponse(Constants.SUCCESSFUL_RATING, HttpStatus.CREATED));
     }

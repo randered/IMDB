@@ -12,6 +12,7 @@ import com.imdb.domain.user.service.UserService;
 import com.imdb.util.common.Constants;
 import com.imdb.util.validation.ValidationResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -28,6 +29,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 @IsAdmin
+@Log4j2
 public class AdminMovieController {
 
     private final MovieService movieService;
@@ -39,8 +41,8 @@ public class AdminMovieController {
     public ResponseEntity<ValidationResponse> uploadImage(
             @NotNull @RequestParam MultipartFile image,
             @NotEmpty @RequestParam String movieName) {
-
         movieService.addImageToMovie(movieName, image);
+        log.info("Uploaded Image {} to movie {}", image.getName(), movieName);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ValidationResponse(Constants.SUCCESSFUL_IMAGE_UPLOAD, HttpStatus.OK));
     }
@@ -48,6 +50,7 @@ public class AdminMovieController {
     @PostMapping(Constants.CREATE_MOVIE)
     public ResponseEntity<ValidationResponse> createMovie(@Valid @RequestBody MovieDto movieDto) {
         movieService.createMovie(movieDto);
+        log.info("Created movie {}", movieDto.getName());
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ValidationResponse(Constants.MOVIE_CREATED, HttpStatus.OK));
     }
@@ -55,18 +58,22 @@ public class AdminMovieController {
     @PostMapping(Constants.CREATE_ACTOR)
     public ResponseEntity<ValidationResponse> createActor(@Valid @RequestBody ActorDto actorDto) {
         actorService.createActor(actorDto);
+        log.info("Created actor {}", actorDto.getName());
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new ValidationResponse("ACTOR_CREATED", HttpStatus.OK));
+                .body(new ValidationResponse("Actor Created.", HttpStatus.OK));
     }
 
     @GetMapping("/actors")
     public ResponseEntity<List<ActorDto>> getAllActors() {
-        return ResponseEntity.ok().body(actorService.findAll());
+        final List<ActorDto> actorDtos = actorService.findAll();
+        log.info(actorDtos);
+        return ResponseEntity.ok().body(actorDtos);
     }
 
     @PutMapping
     public ResponseEntity<ValidationResponse> updateMovie(@Valid @RequestBody MovieDto moviedto) {
         movieService.updateMovie(moviedto);
+        log.info("Updated movie {}", moviedto.getName());
         return ResponseEntity.status(HttpStatus.OK).body(new ValidationResponse(Constants.MOVIE_UPDATED));
     }
 
@@ -74,6 +81,7 @@ public class AdminMovieController {
     public ResponseEntity<ValidationResponse> deleteMovie(
             @NotNull(message = "INVALID_MOVIE_ID") @RequestParam Integer id) {
         movieService.deleteMovie(id);
+        log.info("Movie with {} id deleted.", id);
         return ResponseEntity.status(HttpStatus.OK).body(new ValidationResponse(Constants.MOVIE_DELETED));
     }
 

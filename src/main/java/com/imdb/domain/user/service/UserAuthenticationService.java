@@ -1,10 +1,10 @@
 package com.imdb.domain.user.service;
 
 import com.imdb.domain.role.Role;
-import com.imdb.exceptions.UserAlreadyExistAuthenticationException;
+import com.imdb.domain.user.dto.UserDto;
 import com.imdb.domain.user.entity.User;
 import com.imdb.domain.user.mapper.UserMapper;
-import com.imdb.domain.user.dto.UserDto;
+import com.imdb.exceptions.UserAlreadyExistAuthenticationException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -38,18 +38,20 @@ public class UserAuthenticationService implements UserDetailsService {
             throw new UserAlreadyExistAuthenticationException(userDto.getUsername());
         }
         user = mapUser(userDto);
-        log.info("User Created {} ", user.getFullName());
         userMapper.map(userService.update(user));
+        log.info("User Created {} ", user.getFullName());
     }
 
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         final User user = userService.findUserByUsername(username);
         if (user == null) {
+            log.error(String.format(USER_NOT_FOUND_MSG, username));
             throw new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, username));
         }
         final Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(user.getRole().name()));
+        log.info("User authorized {} ", user.getFullName());
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
     }
 

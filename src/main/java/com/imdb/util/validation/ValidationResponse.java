@@ -31,21 +31,4 @@ public class ValidationResponse {
         this(message);
         this.httpStatus = status.toString();
     }
-
-    public ValidationResponse(Set<String> messages, HttpStatus status){
-        this.messages = messages;
-        this.dateTime = LocalDateTime.now().toString();
-        this.httpStatus = status.toString();
-    }
-
-    public String getMessage(int index) {
-        int count = 0;
-        for (String message : this.messages) {
-            if(count == index){
-                return message;
-            }
-            count++;
-        }
-        throw new IndexOutOfBoundsException();
-    }
 }

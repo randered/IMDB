@@ -11,6 +11,7 @@ import com.imdb.util.common.Constants;
 import com.imdb.domain.movie.filter.MovieFilter;
 import com.imdb.domain.user.dto.UserDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -30,6 +31,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RestController
 @RequestMapping(Constants.BASE_PATH)
 @RequiredArgsConstructor
+@Log4j2
 public class BaseController {
 
     private final UserAuthenticationService userAuthenticationService;
@@ -68,7 +70,9 @@ public class BaseController {
 
     @PostMapping("/movies")
     public Page<MovieDto> getFilteredMovies(@Valid @RequestBody Request<MovieFilter> request) {
-        return movieService.getFilteredMovies(request);
+        final Page<MovieDto> movies = movieService.getFilteredMovies(request);
+        log.info("Showing filtered movies: \n {} ", movies);
+        return movies;
     }
 
 }
